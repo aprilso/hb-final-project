@@ -21,6 +21,15 @@ class User(db.Model):
   icon = db.Column(db.String) #default='dog.jpg'
   #optional: color_id = db.Column(db.String, unique=True)
 
+  #check this - what exactly is happening?
+  dogs = db.relationship("Dog",
+                          secondary="users_dogs",
+                          backref="users")
+                          #relationships means...? why is this one class, this one user?
+                          #if I did it separately instead of back_ref, use back_populates?
+
+                         
+
   def __repr__(self):
         return f'<User: user_id={self.user_id} email={self.email}>'
 
@@ -41,9 +50,39 @@ class Dog(db.Model):
   weight = db.Column(db.Integer, nullable=True)
   food = db.Column(db.String, nullable=True)
   misc_notes = db.Column(db.String, nullable=True)
+  #contacts = db.Column(db.String)
+
+
 
 def __repr__(self):
         return f'<Dog: dog_id={self.user_id} dog_name={self.dog_name}>'
+
+
+#users_dogs is the middle for two one-to-many relationships (not actually many to many)
+# a dog can have many users. a user can have many dogs. 
+
+class UserDog (db.Model):
+  """Dog of a specific user"""
+
+  __tablename__ = "users_dogs"
+
+  usersdogs_id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, 
+            db.ForeignKey('users.user_id'),
+            nullable=False)
+  dog_id = db.Column(db.Integer,
+            db.ForeignKey('dogs.dog_id'),
+            nullable=False)
+  primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the owner of a dog
+
+
+#Questions - relationships vs foreignkey
+#foreignkeys - this column refers to a column in another database table
+#relationships - this thing is a reference to another table 
+#relationships in sqlalchemy do use foreign keys
+
+
+
 
 
 class Task(db.Model):
@@ -51,13 +90,30 @@ class Task(db.Model):
 
   __tablename__ = "tasks"
 
+  task_id = db.Column(db.Integer,
+                autoincrement=True,
+                primary_key=True)
+
+  #Question: did I do this correct?????              
+  dog_id = db.Column(db.Integer,
+            db.ForeignKey('dogs.dog_id'),
+            nullable=False)
+  updated_by = db.Column(db.Integer, 
+            db.ForeignKey('users.user_id'),
+            nullable=False) #references user_id
 
 
-#Next - check how to make users_dogs table
+  date = db.Column(db.DateTime) #need to check what this date is for
+  task = db.Column(db.String)
+  task_last_occurrence = db.Column(db.DateTime)
+  task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?s
+
 
 
 
 #Questions - check if nullable is default to true or false (which one do you have to specify?)
+
+
 
 #----connection----
 
