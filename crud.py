@@ -26,10 +26,10 @@ def get_user_by_email(email):
     return User.query.filter(User.email == email).first()
 
 
-def create_dog(dog_id, dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes):
+def create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes):
   """Create and return a new dog."""
 
-  dog = Dog(dog_id=dog_id, dog_name=dog_name, photo=photo, bio=bio, medication=medication, medical_info=medical_info, allergies=allergies, weight=weight, food=food, misc_notes=misc_notes)
+  dog = Dog(dog_name=dog_name, photo=photo, bio=bio, medication=medication, medical_info=medical_info, allergies=allergies, weight=weight, food=food, misc_notes=misc_notes)
 
   db.session.add(dog)
   db.session.commit()
@@ -37,5 +37,26 @@ def create_dog(dog_id, dog_name, photo, bio, medication, medical_info, allergies
   return dog
 
 def get_dog_by_id(dog_id):
-    """look up the user by id"""
-    return Dog.query.get(dog_id)
+  """look up the user by id"""
+  return Dog.query.get(dog_id)
+
+def return_all_dogs():
+  """return all dogs"""
+  return Dog.query.all()
+
+#To-Do **********
+def get_dog_by_user(user_id):
+  """get all the dogs that belong to a user"""
+  pass
+
+def get_user_by_dog(dog_id):
+  """get all the users of a single dog"""
+  pass
+
+
+
+
+
+if __name__ == '__main__':
+    from server import app
+    connect_to_db(app)
