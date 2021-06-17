@@ -26,20 +26,29 @@ def allusers():
     return render_template("all_users.html", users=users)
 
 @app.route('/users/<user_id>') 
-def userprofile():
+def userprofile(user_id):
     """view your user profile"""
-    pass
+
+    user = crud.get_user_by_id(user_id)
+
+    return render_template("user_details.html", user=user)
 
 @app.route('/dogs')
 def alldogs():
     """view all dogs (*this will not be public)"""
-    pass
+
+    dogs=crud.return_all_dogs()
+
+    return render_template("all_dogs.html", dogs=dogs)
+
 
 @app.route('/dog/<dog_id>') 
 def dogprofile():
     """view the dog's profile"""
-    pass
 
+    dog = crud.get_dog_by_id(dog_id)
+
+    return render_template("dog_profile.html", dog=dog)
 
 
 if __name__ == '__main__':
