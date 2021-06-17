@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.email }} - Details{% endblock %}
+
+{% block body %}
+<h1>{{ user.last_name }}</h1>
+
+<p>
+  Contact them at {{ user.email }}
+</p>
+
+<p>
+  Their dogs:
+  <!-- add a lookup by their dogs -->
+
+</p>
+
+{% endblock %}
