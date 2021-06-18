@@ -43,7 +43,7 @@ def alldogs():
 
 
 @app.route('/dog/<dog_id>') 
-def dogprofile():
+def dogprofile(dog_id):
     """view the dog's profile"""
 
     dog = crud.get_dog_by_id(dog_id)

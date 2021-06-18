@@ -17,21 +17,13 @@ class User(db.Model):
   last_name = db.Column(db.String, nullable=False)
   email = db.Column(db.String, nullable=False, unique=True)
   password = db.Column(db.String)
-  phone_number = db.Column(db.Integer, unique=True)
-  icon = db.Column(db.String) #default='dog.jpg'
+  phone_number = db.Column(db.String, unique=True)
+  icon = db.Column(db.String, default='humanicon.jpg')
   #optional: color_id = db.Column(db.String, unique=True)
 
-  #check this - what exactly is happening?
-  dogs = db.relationship("Dog",
-                          secondary="users_dogs",
-                          backref="users")
-                          #relationships means...? why is this one class, this one user?
-                          #if I did it separately instead of back_ref, use back_populates?
-
-                         
-
+                       
   def __repr__(self):
-        return f'<User: user_id={self.user_id} email={self.email}>'
+        return f'<User: user_id={self.user_id} last_name={self.last_name} email={self.email}>'
 
 class Dog(db.Model):
   """A dog"""
@@ -50,6 +42,13 @@ class Dog(db.Model):
   weight = db.Column(db.Integer, nullable=True)
   food = db.Column(db.String, nullable=True)
   misc_notes = db.Column(db.String, nullable=True)
+  sex=db.Column(db.String)
+  breed=db.Column(db.String)
+  primary_color=db.Column(db.String)
+  microchip_num=db.Column(db.String, nullable=True)
+
+
+
   #contacts = db.Column(db.String)
 
 
@@ -75,8 +74,16 @@ class UserDog (db.Model):
             nullable=False)
   primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the owner of a dog
 
+  user = db.relationship("User")
+  dog = db.relationship("Dog")
+
+
+def __repr__(self):
+        return f'<UserDog: dog_id={self.dog_id} user_id={self.user_id}>'
 
 #Questions - relationships vs foreignkey
+#to have a relationship, need a foreign key in one table, primary key in another table
+
 #foreignkeys - this column refers to a column in another database table
 #relationships - this thing is a reference to another table 
 #relationships in sqlalchemy do use foreign keys
@@ -85,28 +92,28 @@ class UserDog (db.Model):
 
 
 
-class Task(db.Model):
-  """Tasks to do for the dog"""
+# class Task(db.Model):
+#   """Tasks to do for the dog"""
 
-  __tablename__ = "tasks"
+#   __tablename__ = "tasks"
 
-  task_id = db.Column(db.Integer,
-                autoincrement=True,
-                primary_key=True)
+#   task_id = db.Column(db.Integer,
+#                 autoincrement=True,
+#                 primary_key=True)
 
-  #Question: did I do this correct?????              
-  dog_id = db.Column(db.Integer,
-            db.ForeignKey('dogs.dog_id'),
-            nullable=False)
-  updated_by = db.Column(db.Integer, 
-            db.ForeignKey('users.user_id'),
-            nullable=False) #references user_id
+             
+#   dog_id = db.Column(db.Integer,
+#             db.ForeignKey('dogs.dog_id'),
+#             nullable=False)
+#   updated_by = db.Column(db.Integer, 
+#             db.ForeignKey('users.user_id'),
+#             nullable=False) #references user_id
 
 
-  date = db.Column(db.DateTime) #need to check what this date is for
-  task = db.Column(db.String)
-  task_last_occurrence = db.Column(db.DateTime)
-  task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?s
+#   date = db.Column(db.DateTime) #need to check what this date is for
+#   task = db.Column(db.String)
+#   task_last_occurrence = db.Column(db.DateTime)
+#   task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?
 
 
 
@@ -117,7 +124,7 @@ class Task(db.Model):
 
 #----connection----
 
-def connect_to_db(flask_app, db_uri='postgresql:///ratings', echo=True):
+def connect_to_db(flask_app, db_uri='postgresql:///doglogdatabase', echo=True):
   flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
   flask_app.config['SQLALCHEMY_ECHO'] = echo
   flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
