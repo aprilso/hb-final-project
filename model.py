@@ -46,22 +46,17 @@ class Dog(db.Model):
   breed=db.Column(db.String)
   primary_color=db.Column(db.String)
   microchip_num=db.Column(db.String, nullable=True)
-
-
-
   #contacts = db.Column(db.String)
 
-
-
 def __repr__(self):
-        return f'<Dog: dog_id={self.user_id} dog_name={self.dog_name}>'
+        return f'<Dog: dog_id={self.dog_id} dog_name={self.dog_name}>'
 
 
 #users_dogs is the middle for two one-to-many relationships (not actually many to many)
 # a dog can have many users. a user can have many dogs. 
 
 class UserDog (db.Model):
-  """Dog of a specific user"""
+  """Relational class that connects a dog of a specific user"""
 
   __tablename__ = "users_dogs"
 
@@ -74,9 +69,8 @@ class UserDog (db.Model):
             nullable=False)
   primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the owner of a dog
 
-  user = db.relationship("User")
-  dog = db.relationship("Dog")
-
+  user = db.relationship("User", backref='users_dogs')
+  dog = db.relationship("Dog", backref='users_dogs')
 
 def __repr__(self):
         return f'<UserDog: dog_id={self.dog_id} user_id={self.user_id}>'
