@@ -30,8 +30,9 @@ def userprofile(user_id):
     """view your user profile"""
 
     user = crud.get_user_by_id(user_id)
-
-    return render_template("user_details.html", user=user)
+    userdogs = crud.get_dog_by_user(user_id) #need to be able to access Dog class
+    
+    return render_template("user_profile.html", user=user, userdogs=userdogs)
 
 @app.route('/dogs')
 def alldogs():
@@ -42,13 +43,14 @@ def alldogs():
     return render_template("all_dogs.html", dogs=dogs)
 
 
-@app.route('/dog/<dog_id>') 
+@app.route('/dogs/<dog_id>') 
 def dogprofile(dog_id):
     """view the dog's profile"""
 
     dog = crud.get_dog_by_id(dog_id)
+    userdogs = crud.get_user_by_dog(dog_id)
 
-    return render_template("dog_profile.html", dog=dog)
+    return render_template("dog_profile.html", dog=dog, userdogs=userdogs)
 
 
 if __name__ == '__main__':

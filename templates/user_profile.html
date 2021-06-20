@@ -11,7 +11,27 @@
 
 <p>
   Their dogs:
+<ul>
+  
+
+</ul>
+
   <!-- add a lookup by their dogs -->
+
+   <ul>
+    {% for userdog in userdogs %}
+
+    <li>
+        <a href="/dogs/{{ userdog.dog.dog_id }}">{{ userdog.dog.dog_name }}</a>
+
+    </li>
+
+    {% endfor %}
+
+
+
+
+
 
 </p>
 

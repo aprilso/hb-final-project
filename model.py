@@ -48,8 +48,8 @@ class Dog(db.Model):
   microchip_num=db.Column(db.String, nullable=True)
   #contacts = db.Column(db.String)
 
-def __repr__(self):
-        return f'<Dog: dog_id={self.dog_id} dog_name={self.dog_name}>'
+  def __repr__(self):
+        return f"<Dog: dog_id={self.dog_id} dog_name={self.dog_name}>"
 
 
 #users_dogs is the middle for two one-to-many relationships (not actually many to many)
@@ -69,10 +69,10 @@ class UserDog (db.Model):
             nullable=False)
   primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the owner of a dog
 
-  user = db.relationship("User", backref='users_dogs')
-  dog = db.relationship("Dog", backref='users_dogs')
+  user = db.relationship("User")
+  dog = db.relationship("Dog") # is backref necessary? 
 
-def __repr__(self):
+  def __repr__(self):
         return f'<UserDog: dog_id={self.dog_id} user_id={self.user_id}>'
 
 #Questions - relationships vs foreignkey
@@ -81,8 +81,6 @@ def __repr__(self):
 #foreignkeys - this column refers to a column in another database table
 #relationships - this thing is a reference to another table 
 #relationships in sqlalchemy do use foreign keys
-
-
 
 
 

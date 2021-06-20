@@ -25,6 +25,15 @@ def get_user_by_email(email):
     """return a user by email"""
     return User.query.filter(User.email == email).first()
 
+
+def get_user_without_dog(dog_id):
+    """return all users without dogs"""
+    #where their dog_id = null??
+    pass
+
+
+
+
 #Question - this seems unwieldy?
 def create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num):
   """Create and return a new dog."""
@@ -50,13 +59,15 @@ def return_all_dogs():
 def get_dog_by_user(user_id):
   """get all the dogs that belong to a user"""
 
-  return Dog.query.get(user_id)
-  pass
-
+  return UserDog.query.filter(UserDog.user_id == user_id).all()
+  #This part works! but we need it to return all the info for a Dog class - join table...?
+  
+  
 def get_user_by_dog(dog_id):
   """get all the users of a single dog"""
 
-  return User.query.get(dog_id) #double-check this
+  return UserDog.query.filter(UserDog.dog_id == dog_id).all()
+  #Works! 
 
 
 def assign_dog_to_human(user_id, dog_id, primary_user):

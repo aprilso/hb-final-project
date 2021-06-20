@@ -3,7 +3,7 @@
 
 {% block body %}
 <h3>This is the dog_profile.html page</h3>
-<h1>This is {{ dog.name }}</h1>
+<h1>This is {{ dog.dog_name }}</h1>
 
 <p>
 
@@ -12,6 +12,15 @@
 <p>
   Their caretakers:
   <!-- add a lookup by their dogs -->
+
+  <ul>
+    {% for userdog in userdogs %}
+
+    <li>
+        <a href="/users/{{ userdog.user.user_id }}">{{ userdog.user.first_name }} {{userdog.user.last_name }}</a>
+    </li>
+
+    {% endfor %}
 
 </p>
 

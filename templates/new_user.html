@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}List of all users{% endblock %}
+
+{% block body %}
+<h2>Create an Account</h2>
+<form action="/users" method="POST">
+  <p>
+    Email <input type="text" name="email">
+  </p>
+
+  <p>
+    Password <input type="password" name="password">
+  </p>
+
+  <p>
+    <input type="submit">
+  </p>
+</form>
+
+<p>Already have an account? Login here </p>
+{% endblock body%}

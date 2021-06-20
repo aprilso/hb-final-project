@@ -59,9 +59,6 @@ with open('data/male-dog-names.json') as d: #"with" opens the file, closes it fo
 
     db_dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num)
 
-    print("***********", db_dog)
-    print("***********", db_dog.dog_id)
-
     dogs_in_db.append(db_dog)
 
     #create an instance of UserDog class using the primary id of the dog and user that was just created
