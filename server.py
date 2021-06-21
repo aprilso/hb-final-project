@@ -8,7 +8,7 @@ import crud
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
-app.secret_key = "thiswillbeasecretkey" #Question - ask how this works
+app.secret_key = "thiswillbeasecretkey" #Used to encrypt a session. Can set it to generate random #s and letters each time, or in secrets.sh (make more secret before deployment)
 app.jinja_env.undefined = StrictUndefined
 
 @app.route('/')
@@ -30,7 +30,7 @@ def userprofile(user_id):
     """view your user profile"""
 
     user = crud.get_user_by_id(user_id)
-    userdogs = crud.get_dog_by_user(user_id) #need to be able to access Dog class
+    userdogs = crud.get_dog_by_user(user_id) 
     
     return render_template("user_profile.html", user=user, userdogs=userdogs)
 
@@ -51,6 +51,53 @@ def dogprofile(dog_id):
     userdogs = crud.get_user_by_dog(dog_id)
 
     return render_template("dog_profile.html", dog=dog, userdogs=userdogs)
+
+
+
+@app.route('/login', methods=["POST"])
+def login():
+    """login user"""
+    email = request.form.get('login_email')
+    password = request.form.get('login_password')
+
+    print('\n\n\n *********')
+    print(email)
+    print(password)
+
+    user = crud.get_user_by_email(email)
+    if not user or user.password != password: #why use 'if not'?
+        flash("The email or password is incorrect")
+    else:
+        session["user_email"] = user.email
+        flash(f"Welcome back, {user.first_name}")
+    
+    return redirect("/")
+
+@app.route('/new_user')
+def new_user_page():
+
+    return render_template("new_user.html")
+
+@app.route('/users', methods=["POST"])
+def new_user():
+    """creates a new user account"""
+
+    email = request.form.get('email')
+    password = request.form.get('password')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    phone_number = request.form.get('phone_number')
+    icon = 'default_user_icon.jpg'
+
+    new_user = crud.get_user_by_email(email)
+
+    if new_user == None:
+        crud.create_user(first_name, last_name, email, password, phone_number, icon)
+        flash("Success! New account has been created")
+    else:
+        flash("An account with that email already exists.")
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

@@ -28,13 +28,12 @@ def get_user_by_email(email):
 
 def get_user_without_dog(dog_id):
     """return all users without dogs"""
-    #where their dog_id = null??
+    #To-Do - where their dog_id = null??
     pass
 
 
 
-
-#Question - this seems unwieldy?
+#Question - this seems unwieldy? Could take in one dog_info as a dictionary and then key into it 
 def create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num):
   """Create and return a new dog."""
 
@@ -55,12 +54,11 @@ def return_all_dogs():
   """return all dogs"""
   return Dog.query.all()
 
-#To-Do **********
+
 def get_dog_by_user(user_id):
   """get all the dogs that belong to a user"""
 
   return UserDog.query.filter(UserDog.user_id == user_id).all()
-  #This part works! but we need it to return all the info for a Dog class - join table...?
   
   
 def get_user_by_dog(dog_id):
@@ -71,7 +69,7 @@ def get_user_by_dog(dog_id):
 
 
 def assign_dog_to_human(user_id, dog_id, primary_user):
-  """assign a dog to a human"""
+  """assign a dog to a human""" #should also work for assign human to dog
 
   userdog = UserDog(dog_id=dog_id, user_id=user_id, primary_user=primary_user)
 
@@ -79,8 +77,7 @@ def assign_dog_to_human(user_id, dog_id, primary_user):
   db.session.commit()
 
   return userdog
-
-
+  #Works!
 
 
 

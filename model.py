@@ -67,10 +67,10 @@ class UserDog (db.Model):
   dog_id = db.Column(db.Integer,
             db.ForeignKey('dogs.dog_id'),
             nullable=False)
-  primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the owner of a dog
+  primary_user = db.Column(db.Boolean) #optional - this is just to indicate if someone's the main owner of a dog
 
   user = db.relationship("User")
-  dog = db.relationship("Dog") # is backref necessary? 
+  dog = db.relationship("Dog") 
 
   def __repr__(self):
         return f'<UserDog: dog_id={self.dog_id} user_id={self.user_id}>'
@@ -116,7 +116,7 @@ class UserDog (db.Model):
 
 #----connection----
 
-def connect_to_db(flask_app, db_uri='postgresql:///doglogdatabase', echo=True):
+def connect_to_db(flask_app, db_uri='postgresql:///doglogdb', echo=True):
   flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
   flask_app.config['SQLALCHEMY_ECHO'] = echo
   flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

@@ -3,7 +3,7 @@
 {% block title %}{{ user.email }} - Details{% endblock %}
 
 {% block body %}
-<h1>{{ user.last_name }}</h1>
+<h1>{{ user.first_name }} {{ user.last_name }}</h1>
 
 <p>
   Contact them at {{ user.email }}
@@ -24,6 +24,7 @@
     <li>
         <a href="/dogs/{{ userdog.dog.dog_id }}">{{ userdog.dog.dog_name }}</a>
 
+         <!-- Need to add if userdog.primary_user is True, add an indication -->
     </li>
 
     {% endfor %}
