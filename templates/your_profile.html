@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.email }} - Details{% endblock %}
+
+{% block body %}
+<h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
+
+<p>
+  Your email is {{ user.email }}
+</p>
+
+<p>
+  Your dogs:
+
+   <ul>
+    {% for userdog in userdogs %}
+    <li>
+        <a href="/dogs/{{ userdog.dog.dog_id }}">{{ userdog.dog.dog_name }}</a>
+
+         <!-- Need to add if userdog.primary_user is True, add an indication -->
+    </li>
+    {% endfor %}
+</p>
+
+Link: Add a new dog  (This will route to crud.py new dog for user)
+Link: Add an existing dog (This will enable you to search for an existing dog )
+
+
+{% endblock %}

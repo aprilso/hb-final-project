@@ -3,7 +3,7 @@
 {% block title %}Dog App Home{% endblock %}
 
 {% block body %}
-<h1>homepage header test</h1>
+<h1>Homepage</h1>
 
 <h1>Welcome!</h1>
 
@@ -12,9 +12,13 @@
     <li><a href="/dogs">View all dogs</a></li>
     <li><a href="/users">View all users</a></li>
     #this will be not publicly visible later
-    <li>Your profile</li>
-    <li>Your dogs</li>
+    
+    <!-- Wrap in an if statement (in jinja formatting) -->
+    <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> (This will render your_profile.html)  Is it a href="/users/ { user.user_id }" ??
+  
   </ul>
+
+  <p>{{session}}</p>
 
   <h2>Login</h2>
   <form action="/login" method="POST">

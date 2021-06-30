@@ -19,7 +19,7 @@ def homepage():
 
 @app.route('/users')
 def allusers():
-    """view all users (*this will not be public)"""
+    """view all users"""
 
     users=crud.return_all_users()
 
@@ -27,12 +27,13 @@ def allusers():
 
 @app.route('/users/<user_id>') 
 def userprofile(user_id):
-    """view your user profile"""
+    """view a user profile"""
 
     user = crud.get_user_by_id(user_id)
     userdogs = crud.get_dog_by_user(user_id) 
     
     return render_template("user_profile.html", user=user, userdogs=userdogs)
+    # NOTE: or is it render template your_profile.html?
 
 @app.route('/dogs')
 def alldogs():
@@ -53,23 +54,19 @@ def dogprofile(dog_id):
     return render_template("dog_profile.html", dog=dog, userdogs=userdogs)
 
 
-
 @app.route('/login', methods=["POST"])
 def login():
     """login user"""
     email = request.form.get('login_email')
     password = request.form.get('login_password')
 
-    print('\n\n\n *********')
-    print(email)
-    print(password)
-
     user = crud.get_user_by_email(email)
     if not user or user.password != password: #why use 'if not'?
         flash("The email or password is incorrect")
     else:
         session["user_email"] = user.email
-        flash(f"Welcome back, {user.first_name}")
+        session["user_id"] = user.user_id #in the future, could just store user_id and lookup email from that
+        flash(f"Welcome back, {user.first_name}") # TO-DO - redirect to the logged in page instead
     
     return redirect("/")
 
@@ -98,6 +95,27 @@ def new_user():
         flash("An account with that email already exists.")
 
     return redirect('/')
+
+@app.route('/add_dog', methods=["POST"])
+def new_dog_to_user():
+
+    dog_name = request.form.get('dog_name')
+    photo = 'default_dog_icon.jpg'
+    bio = request.form.get('bio')
+    medication = request.form.get('medication')
+    medical_info = request.form.get('medical_info')
+    allergies = request.form.get('allergies')
+    weight = request.form.get('weight')
+    food = request.form.get('food')
+    misc_notes = request.form.get('misc_notes')
+    sex = request.form.get('sex')
+    breed = request.form.get('breed')
+    primary_color = request.form.get('primary_color')
+    microchip_num = request.form.get('microchip_num')
+
+    new_dog = crud.create_dog
+
+    pass
 
 
 if __name__ == '__main__':
