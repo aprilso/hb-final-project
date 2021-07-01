@@ -21,7 +21,7 @@
 <h4>Dashboard (will only display when logged in)</h4> 
   <ul>
     <li><a href="/">Home</a></li>
-    <li>Your profile</li>
+    <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> 
     <li>Your dogs</li>
     <li>Notifications</li>
   </ul>
@@ -30,6 +30,7 @@
   <ul>
     <li>Settings</a></li>
     <li>Help</li>
+    <li>About</li>
   </ul>
 
 {% block body %}{% endblock %}

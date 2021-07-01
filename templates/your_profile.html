@@ -5,12 +5,13 @@
 {% block body %}
 <h1>Welcome, {{ user.first_name }} {{ user.last_name }}</h1>
 
-<p>
-  Your email is {{ user.email }}
-</p>
+<h4>Info</h4>
+
+  <li>Email: {{ user.email }}
+  <li>Phone Number: {{ user.phone_number }}
 
 <p>
-  Your dogs:
+<h4>Your dogs </h4>
 
    <ul>
     {% for userdog in userdogs %}
