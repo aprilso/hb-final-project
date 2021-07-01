@@ -96,8 +96,14 @@ def new_user():
 
     return redirect('/')
 
+@app.route('/add_dog')
+def new_dog_page():
+    return render_template("new_dog.html")
+
+
 @app.route('/add_dog', methods=["POST"])
 def new_dog_to_user():
+    """Adds a new dog and automatically adds it to the user"""
 
     dog_name = request.form.get('dog_name')
     photo = 'default_dog_icon.jpg'
@@ -112,10 +118,15 @@ def new_dog_to_user():
     breed = request.form.get('breed')
     primary_color = request.form.get('primary_color')
     microchip_num = request.form.get('microchip_num')
+    dob = request.form.get('dob')
 
-    new_dog = crud.create_dog
+    crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
+    #crud.assign_dog_to_human(user_id, dog_id, primary_user)
+    flash("Success! New dog has been added")
 
-    pass
+    #need to figure out how to 
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

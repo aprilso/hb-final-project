@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}New Dog{% endblock %}
+
+{% block body %}
+<h2>Create a new dog</h2>
+
+
+<form action="/add_dog" method="POST">
+  
+  <p>
+    Dog's name* <input type="text" name="dog_name">
+  </p>
+
+  <p>
+    Sex (make dropdown instead) <input type="text" name="sex">
+  </p>
+
+  <p>
+    Date of Birth <input type="datetime" name="dob">
+  </p>
+
+  <p>
+    Breed <input type="text" name="breed">
+  </p>
+
+  <p>
+    Primary Color <input type="text" name="primary_color">
+  </p>
+
+  <p>
+    Bio <input type="text" name="bio">
+  </p>
+
+  <p>
+    Microchip Number <input type="text" name="microchip_num">
+  </p>
+
+  <p>
+    Medication <input type="text" name="first_name">
+  </p>
+
+  <p>
+    Medical Info <input type="text" name="medical_info">
+  </p>
+
+  <p>
+    Allergies <input type="text" name="allergies">
+  </p>
+
+  <p>
+    Weight (check?) <input type="integer" name="weight"> 
+  </p>
+
+  <p>
+    Food <input type="text" name="food"> 
+  </p>
+
+  <p>
+    Miscellaneous Notes <input type="text" name="misc_notes"> 
+  </p>
+
+  <p>
+    <input type="submit">
+  </p>
+</form>
+
+{% endblock body %}
