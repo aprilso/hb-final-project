@@ -120,11 +120,22 @@ def new_dog_to_user():
     microchip_num = request.form.get('microchip_num')
     dob = request.form.get('dob')
 
-    crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
-    #crud.assign_dog_to_human(user_id, dog_id, primary_user)
-    flash("Success! New dog has been added")
+    
 
-    #need to figure out how to 
+    #user = crud.get_user_by_id(user_id)
+    #session["user_id"] = user.user_id
+
+    dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
+    
+
+    #To-Do - Need to take in the new dog's dog_id somehow
+    user_id = session["user_id"]
+    #dog_id = session["dog_id"]
+    dog_id = dog.dog_id 
+    primary_user = True 
+
+    crud.assign_dog_to_human(user_id, dog_id, primary_user)
+    flash("Success! New dog has been added with you as primary user")
 
     return redirect('/')
 

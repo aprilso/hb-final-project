@@ -3,23 +3,23 @@
 {% block title %}Dog App Home{% endblock %}
 
 {% block body %}
-<h1>Homepage</h1>
+<h1>Welcome</h1>
 
-<h1>Welcome!</h1>
-
-  <h2>Navigation</h2>
+  <h2>Links</h2>
   <ul>
     <li><a href="/dogs">View all dogs</a></li>
     <li><a href="/users">View all users</a></li>
     #this will be not publicly visible later
     
     <!-- Wrap in an if statement (in jinja formatting) -->
-    <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> (This will render your_profile.html)  Is it a href="/users/ { user.user_id }" ??
+
+    <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> 
   
   </ul>
 
-  <p>{{session}}</p>
+  <p>For display only: {{session}}</p>
 
+  <!-- Reroute to a different page if you're logged in or not -->
   <h2>Login</h2>
   <form action="/login" method="POST">
     <p>

@@ -12,12 +12,26 @@
   {% block head %}{% endblock %}
 </head>
 <body>
-  <h2> Dog Log App </h2>
+  <h4> Dog Log App </h4>
   {% for msg in get_flashed_messages() %}
   <p class="flash-msg">
     {{ msg }}
   </p>
 {% endfor %}
+<h4>Dashboard (will only display when logged in)</h4> 
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li>Your profile</li>
+    <li>Your dogs</li>
+    <li>Notifications</li>
+  </ul>
+
+<h4>(Secondary Navbar)</h4>
+  <ul>
+    <li>Settings</a></li>
+    <li>Help</li>
+  </ul>
+
 {% block body %}{% endblock %}
 
 {% block after_body %}{% endblock %}
