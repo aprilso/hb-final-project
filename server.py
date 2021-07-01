@@ -70,6 +70,13 @@ def login():
     
     return redirect("/")
 
+@app.route("/logout")
+def logout():
+    """logs out the user, redirects them to homepage""" #check if this is good
+    session.clear()
+    flash("You have been logged out!")
+    return redirect("/")
+
 @app.route('/new_user')
 def new_user_page():
     """shows the new user account creation page"""
