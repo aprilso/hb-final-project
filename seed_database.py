@@ -45,17 +45,17 @@ with open('data/male-dog-names.json') as d: #"with" opens the file, closes it fo
   for dog in dog_data:
     dog_name= dog 
     photo = "default_dog.jpg"
-    bio = "Add your dog's bio here (optional)"
-    medication = "Add your dog's medication here (optional) "
-    medical_info = "Add your dog's medical info here (optional)" 
-    allergies = "Add your dog's allergies here (optional)" 
+    bio = "A rescue dog from " + fake.country()
+    medication = "Flea medication, once a month"
+    medical_info = "N/A" 
+    allergies = "No allergies" 
     weight = randint(10,75)
-    food = "Add your dog's food here (optional)" 
-    misc_notes = "Add any other miscellaneous notes about your dog here (optional) "
+    food = "Kibbly Bits, 2 cups a day" 
+    misc_notes = choice(["Likes squeaky toys", "Scared of cats", "Nervous around big dogs"])
     sex = choice("MF")
     breed = choice(["Labradoodle","Pug", "Mixed", "Chow Chow", "Terrier Mix"])
     primary_color = choice(["Yellow", "Black", "White", "Brown"])
-    microchip_num = "NONE"
+    microchip_num = "123456789
     dob = fake.date_this_decade()
 
     db_dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
