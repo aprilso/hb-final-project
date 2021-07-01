@@ -11,18 +11,17 @@
 <p> Breed: {{ dog.breed }}
 <p> Birthday: {{ dog.dob}}
 
-
-
 <p>
-  Their caretakers:
+  Their owner (put primary user if true, none if false)
 
+  Their caretakers:
   <ul>
     {% for userdog in userdogs %}
 
     <li>
         <a href="/users/{{ userdog.user.user_id }}">{{ userdog.user.first_name }} {{userdog.user.last_name }}</a>
     </li>
-
+    
     {% endfor %}
 
 </p>

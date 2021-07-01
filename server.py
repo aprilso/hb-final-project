@@ -32,7 +32,7 @@ def userprofile(user_id):
     user = crud.get_user_by_id(user_id)
     userdogs = crud.get_dog_by_user(user_id) 
     
-    return render_template("user_profile.html", user=user, userdogs=userdogs)
+    return render_template("your_profile.html", user=user, userdogs=userdogs)
     # NOTE: or is it render template your_profile.html?
 
 @app.route('/dogs')
@@ -72,6 +72,7 @@ def login():
 
 @app.route('/new_user')
 def new_user_page():
+    """shows the new user account creation page"""
 
     return render_template("new_user.html")
 
@@ -120,17 +121,10 @@ def new_dog_to_user():
     microchip_num = request.form.get('microchip_num')
     dob = request.form.get('dob')
 
-    
-
-    #user = crud.get_user_by_id(user_id)
-    #session["user_id"] = user.user_id
-
     dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
     
-
-    #To-Do - Need to take in the new dog's dog_id somehow
+    #To-Do - Check that primary user is displayed as true
     user_id = session["user_id"]
-    #dog_id = session["dog_id"]
     dog_id = dog.dog_id 
     primary_user = True 
 
@@ -138,6 +132,14 @@ def new_dog_to_user():
     flash("Success! New dog has been added with you as primary user")
 
     return redirect('/')
+
+@app.route('/lookup_dog')
+def lookup_dog(dog_id):
+    dog = crud.get_dog_by_id(dog_id)
+
+    return render_template("dog_profile.html", dog=dog)
+
+
 
 
 if __name__ == '__main__':
