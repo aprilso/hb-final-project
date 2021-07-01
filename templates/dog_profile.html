@@ -5,23 +5,40 @@
 <h3>This is the dog_profile.html page</h3>
 <h1>This is {{ dog.dog_name }}</h1>
 
-<p>(dog image here)</p>
+<p>(dog image here) (upload image link) </p>
 
-<p> Sex: {{ dog.sex }}
-<p> Breed: {{ dog.breed }}
-<p> Birthday: {{ dog.dob}}
+<h4>Basics </h4>
+<li>Sex: {{ dog.sex }}
+<li>Breed: {{ dog.breed }}
+<li>Color: {{ dog.primary_color}}
+<li>Birthday: {{ dog.dob }}
+<li>Bio: {{ dog.bio }}
+
+<!-- ASK: How to do this cleaner with loop? -->
+  
+<h4>Medical </h4>
+<li>Medical Notes: {{dog.medical_info}}
+<li>Allergies: {{dog.allergies}}
+<li>Medication: {{dog.medication}}
+<li>Weight (need to add last date recorded weight): {{dog.weight}}
+<li>Food: {{dog.food}}
+<li>Microchip Number: {{dog.microchip_num}}
+
+<h4>Miscellaneous</h4>
+<li>Notes: {{dog.misc_notes}}
 
 <p>
-  Their owner (put primary user if true, none if false)
+  <h4>Their owner</h4> (put primary user if true, none if false)
+  #Need to add owner's contact info
 
-  Their caretakers:
+  <p>Their caretakers:
   <ul>
     {% for userdog in userdogs %}
 
     <li>
         <a href="/users/{{ userdog.user.user_id }}">{{ userdog.user.first_name }} {{userdog.user.last_name }}</a>
     </li>
-    
+
     {% endfor %}
 
 </p>
