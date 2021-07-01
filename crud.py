@@ -33,14 +33,13 @@ def get_user_without_dog(dog_id):
 
 
 
-#Question - this seems unwieldy? Could take in one dog_info as a dictionary and then key into it 
+#Note: unwieldy, could take in one dog_info as a dictionary and then key into it 
 def create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob):
   """Create and return a new dog."""
 
   dog = Dog(dog_name=dog_name, photo=photo, bio=bio, medication=medication, medical_info=medical_info, allergies=allergies, weight=weight, food=food, misc_notes=misc_notes, sex=sex, breed=breed,
         primary_color=primary_color, microchip_num=microchip_num, dob=dob)
-  #Question - how do I leave it as null for the other variables besides dog_name? Is this just passing in null from front end?
-  #add DOB
+  #add vet
 
   db.session.add(dog)
   db.session.commit()
@@ -55,19 +54,17 @@ def return_all_dogs():
   """return all dogs"""
   return Dog.query.all()
 
+#To-Do: update human info by user_id, update dog info by dog_id
 
 def get_dog_by_user(user_id):
   """get all the dogs that belong to a user"""
 
   return UserDog.query.filter(UserDog.user_id == user_id).all()
   
-  
 def get_user_by_dog(dog_id):
   """get all the users of a single dog"""
 
   return UserDog.query.filter(UserDog.dog_id == dog_id).all()
-  #Works! 
-
 
 def assign_dog_to_human(user_id, dog_id, primary_user):
   """assign a dog to a human""" #should also work for assign human to dog
@@ -78,7 +75,7 @@ def assign_dog_to_human(user_id, dog_id, primary_user):
   db.session.commit()
 
   return userdog
-  #Works!
+
 
 
 
