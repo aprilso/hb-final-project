@@ -46,6 +46,7 @@ class Dog(db.Model):
   breed=db.Column(db.String)
   primary_color=db.Column(db.String)
   microchip_num=db.Column(db.String, nullable=True)
+  dob=db.Column(db.DateTime, nullable=True)
   #contacts = db.Column(db.String)
 
   def __repr__(self):
