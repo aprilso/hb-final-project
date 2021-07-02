@@ -10,16 +10,12 @@
     <li><a href="/dogs">View all dogs</a></li>
     <li><a href="/users">View all users</a></li>
     #this will be not publicly visible later
-    
-    <!-- Wrap in an if statement (in jinja formatting) -->
-
-    <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> 
-  
   </ul>
 
   <p>For display only: {{session}}</p>
 
   <!-- Reroute to a different page if you're logged in or not -->
+{% if not session %} 
   <h2>Login</h2>
   <form action="/login" method="POST">
     <p>
@@ -37,6 +33,8 @@
 
 <h2> Don't have an account yet? </h2>
 <h3><a href="/new_user">Create an account</a> </h3>
+
+{% endif %} 
 
 
 <!-- Stuff will go here -->
