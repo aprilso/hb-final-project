@@ -18,8 +18,10 @@
     {{ msg }}
   </p>
 {% endfor %}
+
+{% if session %} 
 <h4>Dashboard (will only display when logged in)</h4> 
-<!-- To-Do - if None then do not display -->
+
   <ul>
     <li><a href="/">Home</a></li>
     <li><a href="/users/{{ session.get('user_id') }}">Your profile</a></li> 
@@ -27,6 +29,8 @@
     <li>Notifications</li>
     <li><a href="/logout">Sign Out</a></li>
   </ul>
+
+{% endif %} 
 
 <h4>(Secondary Navbar)</h4>
   <ul>
