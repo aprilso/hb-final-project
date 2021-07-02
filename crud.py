@@ -46,6 +46,11 @@ def create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight
 
   return dog
 
+#To-Do - create functions for updating the info for users and dogs (without taking in each variable)
+# def update_dog():
+#Note: check out ratings lab crud.py
+
+
 def get_dog_by_id(dog_id):
   """look up the dog by id"""
   return Dog.query.get(dog_id)

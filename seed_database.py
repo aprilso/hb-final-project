@@ -55,7 +55,7 @@ with open('data/male-dog-names.json') as d: #"with" opens the file, closes it fo
     sex = choice("MF")
     breed = choice(["Labradoodle","Pug", "Mixed", "Chow Chow", "Terrier Mix"])
     primary_color = choice(["Yellow", "Black", "White", "Brown"])
-    microchip_num = "123456789
+    microchip_num = "123456789"
     dob = fake.date_this_decade()
 
     db_dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)

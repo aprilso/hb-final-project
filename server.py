@@ -140,13 +140,26 @@ def new_dog_to_user():
 
     return redirect('/')
 
-@app.route('/lookup_dog')
-def lookup_dog(dog_id):
-    dog = crud.get_dog_by_id(dog_id)
+@app.route('/lookup_dog', methods=["GET"])
+def lookup_dog():
+    """Look up an existing dog to add"""
+    dog_id = request.args.get('dog_id')
 
-    return render_template("dog_profile.html", dog=dog)
+    return redirect(f'/dogs/{ dog_id }')
 
+@app.route('/lookup_dog', methods=["POST"])
+def add_existing_dog():
+    """Adds an existing dog to a user after looking it up"""
 
+    dog_id = session["dog_id"]
+    user_id = session["user_id"]
+    primary_user = False #because they're not the first person who created the dog
+
+    crud.assign_dog_to_human(user_id, dog_id, primary_user)
+
+    flash("Success! You have been added as this dog's caretaker!")
+
+    return redirect('/')
 
 
 if __name__ == '__main__':

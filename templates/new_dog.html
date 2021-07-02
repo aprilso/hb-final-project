@@ -8,12 +8,18 @@
     Dog's name* <input type="text" name="dog_name">
   </p>
 
-  <p>
-    Sex (make dropdown instead) <input type="text" name="sex">
-  </p>
+  <label for="sex">Sex</label>
+  <select id="sex" name="sex">
+    <option value="M">Male</option>
+    <option value="F">Female</option>
+  </select>
+
 
   <p>
-    Date of Birth <input type="datetime" name="dob">
+    Date of Birth 
+    <i>(YYYY-MM-DD)</i>
+    <br>
+    <input type="datetime" name="dob">
   </p>
 
   <p>
@@ -45,7 +51,7 @@
   </p>
 
   <p>
-    Weight (check?) <input type="integer" name="weight"> 
+    Weight <input type="integer" name="weight"> 
   </p>
 
   <p>
@@ -65,7 +71,7 @@
 
 <p> Lookup by name or dog id </p>
 
-<form action="/lookup_dog" method="POST">
+<form action="/lookup_dog" method="GET">
 <p>
     Dog ID <input type="integer" name="dog_id">
 </p>
