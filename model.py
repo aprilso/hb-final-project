@@ -90,28 +90,28 @@ class UserDog (db.Model):
 
 
 
-# class Task(db.Model):
-#   """Tasks to do for the dog"""
+class Task(db.Model):
+  """Tasks to do for the dog"""
 
-#   __tablename__ = "tasks"
+  __tablename__ = "tasks"
 
-#   task_id = db.Column(db.Integer,
-#                 autoincrement=True,
-#                 primary_key=True)
+  task_id = db.Column(db.Integer,
+                autoincrement=True,
+                primary_key=True)
 
              
-#   dog_id = db.Column(db.Integer,
-#             db.ForeignKey('dogs.dog_id'),
-#             nullable=False)
-#   updated_by = db.Column(db.Integer, 
-#             db.ForeignKey('users.user_id'),
-#             nullable=False) #references user_id
+  dog_id = db.Column(db.Integer,
+            db.ForeignKey('dogs.dog_id'),
+            nullable=False)
+  updated_by = db.Column(db.Integer, 
+            db.ForeignKey('users.user_id'),
+            nullable=False) #references user_id
 
 
-#   date = db.Column(db.DateTime) #need to check what this date is for
-#   task = db.Column(db.String)
-#   task_last_occurrence = db.Column(db.DateTime)
-#   task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?
+  date = db.Column(db.DateTime) #need to check what this date is for
+  task = db.Column(db.String)
+  task_last_occurrence = db.Column(db.DateTime)
+  task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?
 
 
 
