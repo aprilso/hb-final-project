@@ -21,7 +21,12 @@ class User(db.Model):
   icon = db.Column(db.String, default='humanicon.jpg')
   #optional: color_id = db.Column(db.String, unique=True)
 
-                       
+  dogs = db.relationship("Dog",
+                        secondary="users_dogs",
+                        backref="users")
+  #can access the dogs attribute through users_dogs, don't have to create for Dog class also cause backref
+  #optional - check crud functions for accessing users with dogs?
+                    
   def __repr__(self):
         return f'<User: user_id={self.user_id} last_name={self.last_name} email={self.email}>'
 
@@ -41,7 +46,7 @@ class Dog(db.Model):
   allergies = db.Column(db.String, nullable=True)
   weight = db.Column(db.Integer, nullable=True)
   food = db.Column(db.String, nullable=True)
-  misc_notes = db.Column(db.String, nullable=True)
+  misc_notes = db.Column(db.String, nullable = True)
   sex=db.Column(db.String)
   breed=db.Column(db.String)
   primary_color=db.Column(db.String)
