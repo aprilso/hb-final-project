@@ -91,7 +91,8 @@ class UserDog (db.Model):
 
 
 class Task(db.Model):
-  """Tasks to do for the dog"""
+  """Scheduled tasks to do for the dog"""
+   #tasks specific to that dog - tasks marked as done 
 
   __tablename__ = "tasks"
 
@@ -99,19 +100,63 @@ class Task(db.Model):
                 autoincrement=True,
                 primary_key=True)
 
-             
   dog_id = db.Column(db.Integer,
             db.ForeignKey('dogs.dog_id'),
             nullable=False)
-  updated_by = db.Column(db.Integer, 
+  
+  task_name = db.Column(db.String)
+  task_created_time = db.Column(db.DateTime) 
+  # optional - should take in local datetime from the computer, on the front-end
+  
+  task_frequency = db.Column(db.Enum)
+  #Enum - like a string, but restricted to on the front end to dropdown Daily, Weekly, Monthly, Yearly
+
+  #OPTION: Maybe just make dropdowns to just Morning, Afternoon, Evening
+  task_scheduled_time = db.Column(db.Enum) #On Frontend - Morning, Afternoon, Evening
+  flexible = db.Column(db.Boolean) #optional, as a checkbox - then you don't have to set the time (like "all-day")
+  #it could appear at the top 
+
+  task_scheduled_day = db.Column(db.Enum) #restrict on the frontend Monday, Tuesday, etc + everyday
+  #if daily, it should already be everyday
+
+  task_scheduled_hour_start = db.Column(db.DateTime)
+  task_scheduled_hour_end = db.Column(db.DateTime) #not required for all tasks
+ 
+
+class TaskHistory(db.Model):
+  """History of the specific dog's tasks"""
+  #track the user who completed the tasks here 
+  #Ex: Query Join with the Task table, filtering taskhistory by user_id
+
+  __tablename__ = "task_history"
+
+  taskhistory_id = db.Column(db.Integer,
+                    autoincrement=True,
+                    primary_key=True)
+
+  task_id = db.Column(db.Integer,
+            db.ForeignKey('tasks.task_id'),
+            nullable=True)
+
+  user_id = db.Column(db.Integer, 
             db.ForeignKey('users.user_id'),
-            nullable=False) #references user_id
+            nullable=False) 
+
+  date = db.Column(db.DateTime)
+  #option: restricting time frame when you can complete task, like morning walk only in morning
+  #can log in whenever you want
+  #You'll get the information from the task table
+
+  task_comment = db.Column(db.String)
+  task_completed = db.Column(db.Boolean, nullable=True) #check that it defaults to False as start
+
+  #Frontend - unscheduled task, task_id nullable=True
+  #A task that doesn't need to be set, dropdown has (Unscheduled Event)
+  #so the task_id takes in None. Frontend restriction
+  #each element will have task_id - in this case the task_id will be none. 
+ 
 
 
-  date = db.Column(db.DateTime) #need to check what this date is for
-  task = db.Column(db.String)
-  task_last_occurrence = db.Column(db.DateTime)
-  task_frequency = db.Column(db.DateTime) #unsure if DateTime is the best?
 
 
 
