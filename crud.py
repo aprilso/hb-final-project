@@ -1,6 +1,6 @@
 """CRUD operations (Create Read Update Delete) """
 
-from model import db, User, Dog, UserDog, connect_to_db
+from model import Task, TaskHistory, db, User, Dog, UserDog, connect_to_db
 from datetime import datetime
 
 def create_user(first_name, last_name, email, password, phone_number, icon):
@@ -80,6 +80,38 @@ def assign_dog_to_human(user_id, dog_id, primary_user):
   db.session.commit()
 
   return userdog
+
+#TASKS SECTION ----
+
+def create_task(dog_id, task_name, task_created_time, task_frequency, task_scheduled_time, flexible, task_scheduled_day, 
+                task_scheduled_hour_start, task_scheduled_hour_end):
+  """create a task for a dog (to be completed by the user)"""
+  
+  task = Task(dog_id=dog_id, task_name=task_name, task_created_time=task_created_time, task_frequency=task_frequency, task_scheduled_time=task_scheduled_time, flexible=flexible, 
+        task_scheduled_day=task_scheduled_day, task_scheduled_hour_start=task_scheduled_hour_start, task_scheduled_hour_end=task_scheduled_hour_end)
+
+  db.session.add(task)
+  db.session.commit()
+
+  return task
+
+def get_tasks_by_dog(dog_id):
+  """return all the tasks that belong to one dog"""
+
+  return Task.query.filter(Task.dog_id == dog_id).all()
+  
+def mark_task_complete():
+  """Update the status of a task - mark an existing dog's task as complete or add notes """
+  pass
+
+def return_completed_tasks():
+  """return all tasks that have already been completed"""
+  pass
+
+def return_all_tasks_until_now():
+  """return all tasks up until this datetime"""
+  #will reference TaskHistory
+  pass
 
 
 
