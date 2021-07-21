@@ -1,7 +1,7 @@
 """Server for dog logging app."""
 
 from flask import (Flask, render_template, request, flash, session,
-                   redirect)
+                   redirect, jsonify)
 from model import connect_to_db
 import crud
 
@@ -33,7 +33,6 @@ def userprofile(user_id):
     userdogs = crud.get_dog_by_user(user_id) 
     
     return render_template("your_profile.html", user=user, userdogs=userdogs)
-    # NOTE: or is it render template your_profile.html?
 
 @app.route('/dogs')
 def alldogs():
@@ -119,14 +118,14 @@ def new_dog_to_user():
     medication = request.form.get('medication')
     medical_info = request.form.get('medical_info')
     allergies = request.form.get('allergies')
-    weight = request.form.get('weight')
+    weight = request.form.get('weight') or None
     food = request.form.get('food')
     misc_notes = request.form.get('misc_notes')
     sex = request.form.get('sex')
     breed = request.form.get('breed')
     primary_color = request.form.get('primary_color')
-    microchip_num = request.form.get('microchip_num')
-    dob = request.form.get('dob')
+    microchip_num = request.form.get('microchip_num') or None
+    dob = request.form.get('dob') or None
 
     dog = crud.create_dog(dog_name, photo, bio, medication, medical_info, allergies, weight, food, misc_notes, sex, breed, primary_color, microchip_num, dob)
     
@@ -161,6 +160,64 @@ def add_existing_dog():
 
     return redirect('/')
 
+#---TASKS SECTION ---
+
+#TASK_DATA for testing only - delete later
+TASK_DATA = [
+    {
+        "task": "Morning walk",
+        "frequency": "Daily",
+        "instructions": "Walk for 30 mins, clip on harness"
+    },
+    {
+        "task": "Evening meal",
+        "frequency": "Daily",
+        "instructions": "1 cup kibble, put in slow feeder bowl"
+    },
+    {
+        "task": "Parasite medication",
+        "frequency": "Monthly",
+        "instructions": "Put in food or coat in peanut butter, make sure dog swallows"
+    },
+    {
+        "task": "Nail trim",
+        "frequency": "Monthly",
+        "instructions": "Trim nails with nail clipper"
+    }
+]
+
+@app.route("/dogs/<dog_id>/schedule")
+def show_schedule(dog_id):
+    session["dog_id"] = dog_id
+
+
+    return render_template("/daily_schedule.html")
+    
+
+@app.route("/add-task", methods=["POST"])
+def add_task():
+    """Add a new task to the database."""
+    task_name = request.get_json().get("task_name")
+    frequency = request.get_json().get("frequency")
+    instructions = request.get_json().get("instructions")
+    dog_id = session["dog_id"]
+
+  
+
+     #QUESTION - how to get dog_id from the URL in server.py
+
+    created_task = crud.create_task(dog_id, task_name, frequency, instructions)
+
+
+    new_task = {
+        "taskID" : created_task.task_id,
+        "taskName": created_task.task_name,
+        "frequency": created_task.frequency,
+        "instructions": created_task.instructions  
+    }
+
+    return jsonify({"success": True, "taskAdded": new_task})
+    #don't need a flash message b/c it will show up after you press the Add button 
 
 if __name__ == '__main__':
     connect_to_db(app)

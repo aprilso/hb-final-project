@@ -108,7 +108,7 @@ class Task(db.Model):
   task_created_time = db.Column(db.DateTime) 
   # optional - should take in local datetime from the computer, on the front-end
   
-  task_frequency = db.Column(db.Enum)
+  frequency = db.Column(db.Enum)
   #Enum - like a string, but restricted to on the front end to dropdown Daily, Weekly, Monthly, Yearly
 
   #OPTION: Maybe just make dropdowns to just Morning, Afternoon, Evening
@@ -121,6 +121,13 @@ class Task(db.Model):
 
   task_scheduled_hour_start = db.Column(db.DateTime)
   task_scheduled_hour_end = db.Column(db.DateTime) #not required for all tasks
+
+  #simplified version --
+  instructions = db.Column(db.String)
+
+
+  def __repr__(self):
+      return f'<Task: dog_id={self.dog_id} task={self.task_id} task_name = {self.task_name}>'
  
 
 class TaskHistory(db.Model):
