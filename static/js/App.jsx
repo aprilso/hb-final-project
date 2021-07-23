@@ -1,7 +1,8 @@
 function App() {
   return <div>
         <Greeting /> 
-        <Task task="task"/>
+        <Task task_name="walking" instructions="leash by the door" />
+        <ViewSchedule />
         <AddTaskToSchedule />
         </div>
   
@@ -16,7 +17,7 @@ function Greeting(props) {
 function Task(props) {
   return (
     <div className="task">
-      <p>Task: {props.task} </p> 
+      <p>Task: {props.task_name} </p> 
       <p>Instructions: {props.instructions} </p>
       <p>Frequency: {props.frequency}</p>
       <p>Created by (optional): {props.user_id}</p> 
@@ -26,27 +27,50 @@ function Task(props) {
 
 function ViewSchedule() {
   //TO-DO - view all the tasks, array of objects to loop over, generate a component for each one
+  
+  const [schedule, setSchedule] = React.useState([]);
 
+  React.useEffect(() => {
+    fetch("/api/dogschedule") //need to actually add the API
+      .then((response) => response.json())
+      .then((result) => {
+        setSchedule(result);
+      });
+  }, []);
 
+  const scheduleListItems = [];
+  
+  <h2>Current Schedule: </h2>
+  for (let each of schedule) {
+    scheduleListItems.push(<li key={each.task_id}>{each.task_name}</li>);
+  }
+  return <ul>{scheduleListItems}</ul>;
 }
 
+//
 function AddTaskToSchedule(props) {
-  const[task, setTask] = React.useState("");
+  const[task_name, setTask] = React.useState("");
   const[frequency, setFrequency] = React.useState("");
   const[instructions, setInstructions] = React.useState("");
+
+  var myJSONObject = {"task_name": "Walk", 
+                      "frequency": "Daily",
+                      "instructions": "Use leash"
+  };  
+
   function addNewTask() {
-    fetch("add-task", {
+    fetch("/add-task", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", //example - 
+        "Content-Type": "application/json", 
       },
-      body: JSON.stringify({ task, frequency, instructions }), //example - 
+      body: JSON.stringify({ task_name, frequency, instructions }), 
       }).then((response) => response.json())
         .then((jsonResponse) => { 
           const {
-            taskAdded: { taskId, task, frequency, instructions },
+            taskAdded: { task_name, frequency, instructions },
           } = jsonResponse; 
-          props.addTask(taskId, task, frequency, instructions );
+          props.addTask( task_name, frequency, instructions );
       });
   }
   return (
@@ -54,7 +78,7 @@ function AddTaskToSchedule(props) {
       <h2>Add New Task</h2>
       <label htmlFor="taskInput">Task Name</label>
       <input
-        value={task}
+        value={task_name}
         onChange={(event) => setTask(event.target.value)}
         id="taskInput"
       ></input>
@@ -70,7 +94,7 @@ function AddTaskToSchedule(props) {
         onChange= {(event) => setInstructions(event.target.value)}
         id="taskInstructions"
       ></input>
-      <button onClick = {addNewTask}>
+      <button onClick = {addNewTask}> 
         Add
       </button>
     </React.Fragment>
@@ -88,8 +112,6 @@ function AddNoteToCalendar() {
 function AddEventoccurrence() {
   //TO-DO 
 }
-
-
 
 // ----- All of the above will render on the html page with the tag root -----
 ReactDOM.render(<App />, document.querySelector("#root"));

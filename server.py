@@ -162,25 +162,25 @@ def add_existing_dog():
 
 #---TASKS SECTION ---
 
-#TASK_DATA for testing only - delete later
-TASK_DATA = [
+#TEST_TASK_DATA for testing only - delete later
+TEST_TASK_DATA = [
     {
-        "task": "Morning walk",
+        "task_name": "Morning walk",
         "frequency": "Daily",
         "instructions": "Walk for 30 mins, clip on harness"
     },
     {
-        "task": "Evening meal",
+        "task_name": "Evening meal",
         "frequency": "Daily",
         "instructions": "1 cup kibble, put in slow feeder bowl"
     },
     {
-        "task": "Parasite medication",
+        "task_name": "Parasite medication",
         "frequency": "Monthly",
         "instructions": "Put in food or coat in peanut butter, make sure dog swallows"
     },
     {
-        "task": "Nail trim",
+        "task_name": "Nail trim",
         "frequency": "Monthly",
         "instructions": "Trim nails with nail clipper"
     }
@@ -190,24 +190,22 @@ TASK_DATA = [
 def show_schedule(dog_id):
     session["dog_id"] = dog_id
 
-
     return render_template("/daily_schedule.html")
     
 
 @app.route("/add-task", methods=["POST"])
 def add_task():
     """Add a new task to the database."""
+
+    #return jsonify({"success": True, "taskAdded": request.get_json()})
+
     task_name = request.get_json().get("task_name")
     frequency = request.get_json().get("frequency")
     instructions = request.get_json().get("instructions")
-    dog_id = session["dog_id"]
-
-  
-
-     #QUESTION - how to get dog_id from the URL in server.py
+    dog_id = 2
+    #dog_id = session["dog_id"]
 
     created_task = crud.create_task(dog_id, task_name, frequency, instructions)
-
 
     new_task = {
         "taskID" : created_task.task_id,
@@ -218,6 +216,18 @@ def add_task():
 
     return jsonify({"success": True, "taskAdded": new_task})
     #don't need a flash message b/c it will show up after you press the Add button 
+
+@app.route ('/api/dogschedule')  #or use "("/dogschedule.json")?
+def dog_schedule():
+    """Returns info about a dog's schedule as JSON"""
+
+    #get it from the database here
+
+    #return jsonify( #you info from the database here )
+    #Question - how to connect from database???
+  
+    return jsonify(TEST_TASK_DATA)
+    
 
 if __name__ == '__main__':
     connect_to_db(app)
