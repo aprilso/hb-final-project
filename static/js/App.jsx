@@ -1,7 +1,7 @@
 function App() {
   return <div>
         <Greeting /> 
-        <Task task_name="walking" instructions="leash by the door" />
+        {/* <Task task_name="walking" instructions="leash by the door" /> */}
         <ViewSchedule />
         <AddTaskToSchedule />
         </div>
@@ -27,11 +27,11 @@ function Task(props) {
 
 function ViewSchedule() {
   //TO-DO - view all the tasks, array of objects to loop over, generate a component for each one
-  
+  let dogId = parseInt(window.location.pathname.replace("/dogs/", "").replace("/schedule", ""))
   const [schedule, setSchedule] = React.useState([]);
 
   React.useEffect(() => {
-    fetch("/api/dogschedule") //need to actually add the API
+    fetch(`/api/dogschedule/${dogId}`) 
       .then((response) => response.json())
       .then((result) => {
         setSchedule(result);
@@ -39,12 +39,14 @@ function ViewSchedule() {
   }, []);
 
   const scheduleListItems = [];
-  
-  <h2>Current Schedule: </h2>
+
   for (let each of schedule) {
-    scheduleListItems.push(<li key={each.task_id}>{each.task_name}</li>);
+    scheduleListItems.push(<li key={each.task_id}>{each.task_name} | {each.frequency} | {each.instructions}</li>);
   }
-  return <ul>{scheduleListItems}</ul>;
+  return <React.Fragment>
+    <h2>Current Schedule: </h2>
+    <ul>{scheduleListItems}</ul>;
+    </React.Fragment>
 }
 
 //
@@ -81,19 +83,19 @@ function AddTaskToSchedule(props) {
         value={task_name}
         onChange={(event) => setTask(event.target.value)}
         id="taskInput"
-      ></input>
+      ></input><br></br>
       <label htmlFor="frequencyInput">Frequency (make this an enum dropdown)</label>
       <input
         value= {frequency}
         onChange={(event) =>setFrequency(event.target.value)}
         id="frequencyInput"
-      ></input>
+      ></input><br></br>
       <label htmlFor="taskInstructions">Instructions</label>
       <input
         value={instructions}
         onChange= {(event) => setInstructions(event.target.value)}
         id="taskInstructions"
-      ></input>
+      ></input><br></br>
       <button onClick = {addNewTask}> 
         Add
       </button>

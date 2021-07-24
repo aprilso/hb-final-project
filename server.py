@@ -202,8 +202,8 @@ def add_task():
     task_name = request.get_json().get("task_name")
     frequency = request.get_json().get("frequency")
     instructions = request.get_json().get("instructions")
-    dog_id = 2
-    #dog_id = session["dog_id"]
+    #dog_id = 2
+    dog_id = session["dog_id"]
 
     created_task = crud.create_task(dog_id, task_name, frequency, instructions)
 
@@ -217,16 +217,28 @@ def add_task():
     return jsonify({"success": True, "taskAdded": new_task})
     #don't need a flash message b/c it will show up after you press the Add button 
 
-@app.route ('/api/dogschedule')  #or use "("/dogschedule.json")?
-def dog_schedule():
+@app.route ('/api/dogschedule/<dog_id>')  #or use "("/dogschedule.json")
+def dog_schedule(dog_id):
     """Returns info about a dog's schedule as JSON"""
-
+    
     #get it from the database here
 
     #return jsonify( #you info from the database here )
-    #Question - how to connect from database???
-  
-    return jsonify(TEST_TASK_DATA)
+    #QUESTION - how to connect to the database?
+
+    schedule = [
+        {
+            "task_id": each.task_id,
+            "task_name": each.task_name,
+            "frequency": each.frequency,
+            "instructions": each.instructions
+        }
+        for each in crud.get_tasks_by_dog(dog_id)
+    ]
+    return jsonify(schedule)
+    # print("\n\n\n\n")
+    # print(dog_id)
+    # return jsonify(TEST_TASK_DATA)
     
 
 if __name__ == '__main__':
