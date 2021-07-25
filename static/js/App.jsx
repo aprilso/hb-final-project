@@ -1,9 +1,8 @@
 function App() {
   return <div>
         <Greeting /> 
-        {/* <Task task_name="walking" instructions="leash by the door" /> */}
         <ViewSchedule />
-        <AddTaskToSchedule />
+    
         </div>
   
 }
@@ -41,24 +40,21 @@ function ViewSchedule() {
   const scheduleListItems = [];
 
   for (let each of schedule) {
-    scheduleListItems.push(<li key={each.task_id}>{each.task_name} | {each.frequency} | {each.instructions}</li>);
+    scheduleListItems.push(<li key={each.taskId}>{each.taskName} | {each.frequency} | {each.instructions}</li>);
   }
   return <React.Fragment>
-    <h2>Current Schedule: </h2>
+    <h2>Current Overall Schedule: </h2>
     <ul>{scheduleListItems}</ul>;
+    <AddTaskToSchedule setSchedule={setSchedule} schedule={schedule}/>
     </React.Fragment>
+    
 }
 
-//
 function AddTaskToSchedule(props) {
   const[task_name, setTask] = React.useState("");
   const[frequency, setFrequency] = React.useState("");
   const[instructions, setInstructions] = React.useState("");
-
-  var myJSONObject = {"task_name": "Walk", 
-                      "frequency": "Daily",
-                      "instructions": "Use leash"
-  };  
+  
 
   function addNewTask() {
     fetch("/add-task", {
@@ -69,12 +65,13 @@ function AddTaskToSchedule(props) {
       body: JSON.stringify({ task_name, frequency, instructions }), 
       }).then((response) => response.json())
         .then((jsonResponse) => { 
-          const {
-            taskAdded: { task_name, frequency, instructions },
-          } = jsonResponse; 
-          props.addTask( task_name, frequency, instructions );
+          props.setSchedule([...props.schedule, jsonResponse.taskAdded])
+          setTask("")
+          setFrequency("")
+          setInstructions("")
       });
   }
+
   return (
     <React.Fragment>
       <h2>Add New Task</h2>
@@ -84,12 +81,14 @@ function AddTaskToSchedule(props) {
         onChange={(event) => setTask(event.target.value)}
         id="taskInput"
       ></input><br></br>
-      <label htmlFor="frequencyInput">Frequency (make this an enum dropdown)</label>
+      <label htmlFor="frequencyInput">Frequency (make this a dropdown)</label>
       <input
-        value= {frequency}
+        value={frequency}
         onChange={(event) =>setFrequency(event.target.value)}
         id="frequencyInput"
-      ></input><br></br>
+      ></input>
+      
+      <br></br>
       <label htmlFor="taskInstructions">Instructions</label>
       <input
         value={instructions}
@@ -103,6 +102,11 @@ function AddTaskToSchedule(props) {
   );
 }
 
+function TodaysScheduleList() {
+  //TO-DO - view today's schedule 
+  // can use FullCalendar list view
+}
+
 function MarkTaskComplete() {
   //TO-DO
 }
@@ -111,7 +115,7 @@ function AddNoteToCalendar() {
   //TO-DO
 }
 
-function AddEventoccurrence() {
+function AddEventOccurrence() {
   //TO-DO 
 }
 
