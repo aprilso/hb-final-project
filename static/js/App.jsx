@@ -1,4 +1,5 @@
 function App() {
+  // state = { Reload:'false'};
   return <div>
         <Greeting /> 
         <ViewSchedule />
@@ -24,8 +25,9 @@ function Task(props) {
   );
 }
 
+
+
 function ViewSchedule() {
-  //TO-DO - view all the tasks, array of objects to loop over, generate a component for each one
   let dogId = parseInt(window.location.pathname.replace("/dogs/", "").replace("/schedule", ""))
   const [schedule, setSchedule] = React.useState([]);
 
@@ -40,21 +42,41 @@ function ViewSchedule() {
   const scheduleListItems = [];
 
   for (let each of schedule) {
-    scheduleListItems.push(<li key={each.taskId}>{each.taskName} | {each.frequency} | {each.instructions}</li>);
+    scheduleListItems.push(<li key={each.taskId}>{each.taskName} | {each.frequency} | {each.instructions} | 
+    <button onClick = {() => deleteTask(each.taskId)}> 
+      Delete Task
+    </button></li>);
   }
   return <React.Fragment>
     <h2>Current Overall Schedule: </h2>
     <ul>{scheduleListItems}</ul>;
     <AddTaskToSchedule setSchedule={setSchedule} schedule={schedule}/>
     </React.Fragment>
-    
 }
+
+function deleteTask(task_id, props) {
+  
+  fetch("/delete-task/"+ task_id,  {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json", 
+    }, 
+    }).then((response) => response.json())
+      .then((jsonResponse) => { 
+        // const [Reload, True] = React.useState([]);
+        // Right now, it deletes the task but needs to change the state to reload ViewSchedule
+        //The li needs to be a React Component 
+    });
+}
+
+
 
 function AddTaskToSchedule(props) {
   const[task_name, setTask] = React.useState("");
   const[frequency, setFrequency] = React.useState("");
   const[instructions, setInstructions] = React.useState("");
-  
+
+  const frequencyList = ["Daily", "Monthly", "Yearly"];
 
   function addNewTask() {
     fetch("/add-task", {
@@ -82,12 +104,16 @@ function AddTaskToSchedule(props) {
         id="taskInput"
       ></input><br></br>
       <label htmlFor="frequencyInput">Frequency (make this a dropdown)</label>
-      <input
-        value={frequency}
+
+      <select
         onChange={(event) =>setFrequency(event.target.value)}
         id="frequencyInput"
-      ></input>
-      
+        >
+        {frequencyList.map(function (frequency) {
+                  return <option>{frequency}</option>; 
+                  })}
+      </select> 
+
       <br></br>
       <label htmlFor="taskInstructions">Instructions</label>
       <input
@@ -118,6 +144,7 @@ function AddNoteToCalendar() {
 function AddEventOccurrence() {
   //TO-DO 
 }
+
 
 // ----- All of the above will render on the html page with the tag root -----
 ReactDOM.render(<App />, document.querySelector("#root"));
