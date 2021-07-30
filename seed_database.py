@@ -41,7 +41,6 @@ with open('data/male-dog-names.json') as d: #"with" opens the file, closes it fo
 
   dogs_in_db = []
 
-#To-Do: add plausible (random choice) data for each of these
   for dog in dog_data:
     dog_name= dog 
     photo = "default_dog.jpg"
@@ -68,4 +67,3 @@ with open('data/male-dog-names.json') as d: #"with" opens the file, closes it fo
     primary_user = True #the user can be primary user for multiple dogs  
 
     db_userdog = crud.assign_dog_to_human(user_id, dog_id, primary_user)
-

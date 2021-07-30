@@ -59,6 +59,17 @@ def return_all_dogs():
   """return all dogs"""
   return Dog.query.all()
 
+def update_dog_photo(dog_id, new_photo):
+  """update the dog's photo url from the upload"""
+  # 7/25/21 - check if this works
+
+  old_photo = Dog.query.filter(Dog.dog_id==dog_id).first()
+  old_photo.photo = new_photo
+  db.session.commit()
+
+  # Dog.query.filter(Dog.photo == photo).replace()
+  # db.session.commit()
+
 #To-Do: update human info by user_id, update dog info by dog_id
 
 def get_dog_by_user(user_id):
@@ -88,7 +99,6 @@ def create_task(dog_id, task_name, frequency, instructions):
   """simplied version of creating a task """
 
   task = Task(dog_id=dog_id, task_name=task_name, frequency=frequency, instructions=instructions)
-  #QUESTION - how to get dog_id from the URL in server.py
 
   db.session.add(task)
   db.session.commit()
@@ -96,7 +106,7 @@ def create_task(dog_id, task_name, frequency, instructions):
   return task
 
 
-# #TASKS -COMPLICATED VERSION
+# TASKS -COMPLICATED VERSION
 # def create_task(dog_id, task_name, task_created_time, frequency, task_scheduled_time, flexible, task_scheduled_day, 
 #                 task_scheduled_hour_start, task_scheduled_hour_end):
 #   """create a task for a dog (to be completed by the user)"""
@@ -110,13 +120,24 @@ def create_task(dog_id, task_name, frequency, instructions):
 #   return task
 
 def get_tasks_by_dog(dog_id):
-  """return all the tasks that belong to one dog"""
+  """return all the tasks that are scheduled to one dog"""
   return Task.query.filter(Task.dog_id == dog_id).all()
   
 def mark_task_complete():
   """Update the status of a task - mark an existing dog's task as complete or add notes """
   pass
 
+def sort_tasks_by_frequency(frequency):
+  """show all tasks by frequency (ex: show all daily tasks)"""
+  return Task.query.filter(Task.frequency == frequency).all()
+
+def delete_task(task_id):
+  """delete a selected task"""
+
+  Task.query.filter(Task.task_id == task_id).delete()
+  db.session.commit()
+  return "1"
+  
 def return_completed_tasks():
   """return all tasks that have already been completed"""
   pass
@@ -133,7 +154,6 @@ def return_all_tasks_from_user(user_id):
 
 #CRUD - make a function that translates the Dictionary format of Task class objects - getting information that's already there
 #Still need all the server side functions
-
 
 
 if __name__ == '__main__':

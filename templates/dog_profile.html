@@ -5,7 +5,13 @@
 <h3>This is the dog_profile.html page</h3>
 <h1>This is {{ dog.dog_name }}</h1>
 
+<img src="{{ img_src }}">
 <p>(dog image here) (upload image link) </p>
+
+<form action="/upload-dog-photo" method="post" enctype="multipart/form-data">
+  <input type="file" name="dog-photo">
+  <input type="submit">
+</form>
 
 <li><a href="/dogs/{{ dog.dog_id }}/schedule">Dog's Schedule</a></li>
 

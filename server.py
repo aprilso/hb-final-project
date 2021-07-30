@@ -2,8 +2,14 @@
 
 from flask import (Flask, render_template, request, flash, session,
                    redirect, jsonify)
+from flask.helpers import url_for
 from model import connect_to_db
 import crud
+import cloudinary.uploader
+import os
+
+CLOUDINARY_KEY = os.environ['CLOUDINARY_KEY']
+CLOUDINARY_KEY_SECRET = os.environ['CLOUDINARY_SECRET']
 
 from jinja2 import StrictUndefined
 
@@ -49,8 +55,10 @@ def dogprofile(dog_id):
 
     dog = crud.get_dog_by_id(dog_id)
     userdogs = crud.get_user_by_dog(dog_id)
+    img_url = request.args.get('imgURL')
 
-    return render_template("dog_profile.html", dog=dog, userdogs=userdogs)
+
+    return render_template("dog_profile.html", dog=dog, userdogs=userdogs, img_src=img_url)
 
 
 @app.route('/login', methods=["POST"])
@@ -160,6 +168,40 @@ def add_existing_dog():
 
     return redirect('/')
 
+@app.route("/upload-user-photo", methods=["POST"])
+def add_user_photo():
+    """Upload a user (human) photo - optional"""
+    pass
+
+@app.route('/show_image')
+def show_image():
+    img_url = request.args.get('imgURL')
+    dog_id = session['dog_id']
+
+    return redirect(f'/dogs/{ dog_id }')
+
+@app.route("/upload-dog-photo", methods=["POST"])
+def add_dog_photo():
+    """Process and upload a dog profile photo"""
+    dog_photo = request.files['dog-photo']
+
+    result = cloudinary.uploader.upload(dog_photo,
+                                        api_key = CLOUDINARY_KEY,
+                                        api_secret = CLOUDINARY_KEY_SECRET,
+                                        cloud_name = "dogdays")
+    
+    img_url = result['secure_url']
+    dog_id = session['dog_id']
+
+    crud.update_dog_photo(dog_id, img_url)
+    #need to save this result to the database so it can be accessed again - update this as "photo" in the database
+    
+    return redirect(url_for('show_image', imgURL=img_url))
+
+
+        
+    
+
 #---TASKS SECTION ---
 
 #TEST_TASK_DATA for testing only - delete later
@@ -197,18 +239,15 @@ def show_schedule(dog_id):
 def add_task():
     """Add a new task to the database."""
 
-    #return jsonify({"success": True, "taskAdded": request.get_json()})
-
     task_name = request.get_json().get("task_name")
     frequency = request.get_json().get("frequency")
     instructions = request.get_json().get("instructions")
-    #dog_id = 2
     dog_id = session["dog_id"]
 
     created_task = crud.create_task(dog_id, task_name, frequency, instructions)
 
     new_task = {
-        "taskID" : created_task.task_id,
+        "taskId" : created_task.task_id,
         "taskName": created_task.task_name,
         "frequency": created_task.frequency,
         "instructions": created_task.instructions  
@@ -217,19 +256,25 @@ def add_task():
     return jsonify({"success": True, "taskAdded": new_task})
     #don't need a flash message b/c it will show up after you press the Add button 
 
-@app.route ('/api/dogschedule/<dog_id>')  #or use "("/dogschedule.json")
+@app.route("/delete-task/<task_id>", methods=['DELETE'])
+def delete_task(task_id):
+    """delete a selected task"""
+
+    delete_task = crud.delete_task(task_id)
+    response = {"success": delete_task}
+    
+    return response 
+    #could create a conditional statement with error response
+
+
+@app.route ('/api/dogschedule/<dog_id>')  
 def dog_schedule(dog_id):
     """Returns info about a dog's schedule as JSON"""
-    
-    #get it from the database here
-
-    #return jsonify( #you info from the database here )
-    #QUESTION - how to connect to the database?
 
     schedule = [
         {
-            "task_id": each.task_id,
-            "task_name": each.task_name,
+            "taskId": each.task_id,
+            "taskName": each.task_name,
             "frequency": each.frequency,
             "instructions": each.instructions
         }

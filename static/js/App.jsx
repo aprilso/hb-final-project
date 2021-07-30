@@ -1,8 +1,10 @@
 function App() {
-  // state = { Reload:'false'};
+ 
   return <div>
         <Greeting /> 
         <ViewSchedule />
+        
+
     
         </div>
   
@@ -10,6 +12,14 @@ function App() {
 // Can surround with a React.Fragment instead of a div. Return is like html
 
 function Greeting(props) {
+  
+  // let date = new Date("2021-07-30" + 'T00:00:00'); 
+  // calendar.addEvent({
+  //   title: 'Test event',
+
+  //   start: date,
+  //   allDay: true
+  // });
   return <h3>Test Greeting!</h3>;
   //return <h1>Hello {props.name}</h1>;
 }
@@ -53,6 +63,9 @@ function ViewSchedule() {
     <AddTaskToSchedule setSchedule={setSchedule} schedule={schedule}/>
     </React.Fragment>
 }
+//Need to add the existing database tasks to the calendar when you view the page - populate the existing database tasks 
+// into the calendar - something like Calendar.AddEvent with the data
+
 
 function deleteTask(task_id, props) {
   
@@ -76,7 +89,7 @@ function AddTaskToSchedule(props) {
   const[frequency, setFrequency] = React.useState("");
   const[instructions, setInstructions] = React.useState("");
 
-  const frequencyList = ["Daily", "Monthly", "Yearly"];
+  const frequencyList = ["Daily", "Weekly", "Monthly", "Yearly"];
 
   function addNewTask() {
     fetch("/add-task", {
@@ -146,5 +159,6 @@ function AddEventOccurrence() {
 }
 
 
+
 // ----- All of the above will render on the html page with the tag root -----
-ReactDOM.render(<App />, document.querySelector("#root"));
+ReactDOM.render(<App />, document.querySelector("#root"))

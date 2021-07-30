@@ -89,12 +89,33 @@ class UserDog (db.Model):
 #relationships in sqlalchemy do use foreign keys
 
 
+class Task(db.Model): # simple Task version for testing
+  """Simplified Task class for testing"""
 
-class Task(db.Model):
+  __tablename__ = "tasks"
+
+  task_id = db.Column(db.Integer,
+                  autoincrement=True,
+                  primary_key=True)
+
+  dog_id = db.Column(db.Integer,
+              db.ForeignKey('dogs.dog_id'),
+              nullable=False)
+    
+  task_name = db.Column(db.String)
+  frequency = db.Column(db.String) #could set as Enum, but string for now is fine
+  instructions = db.Column(db.String)
+
+  def __repr__(self):
+      return f'<Task: dog_id={self.dog_id} task={self.task_id} task_name = {self.task_name}>'
+
+
+
+class ComplicatedTask(db.Model): #rename as Task later
   """Scheduled tasks to do for the dog"""
    #tasks specific to that dog - tasks marked as done 
 
-  __tablename__ = "tasks"
+  __tablename__ = "complicated_tasks" #rename as tasks later
 
   task_id = db.Column(db.Integer,
                 autoincrement=True,
@@ -108,22 +129,19 @@ class Task(db.Model):
   task_created_time = db.Column(db.DateTime) 
   # optional - should take in local datetime from the computer, on the front-end
   
-  frequency = db.Column(db.Enum)
+  frequency = db.Column(db.String)
   #Enum - like a string, but restricted to on the front end to dropdown Daily, Weekly, Monthly, Yearly
 
   #OPTION: Maybe just make dropdowns to just Morning, Afternoon, Evening
-  task_scheduled_time = db.Column(db.Enum) #On Frontend - Morning, Afternoon, Evening
+  task_scheduled_time = db.Column(db.String) #On Frontend - Morning, Afternoon, Evening (coukd be #Enum)
   flexible = db.Column(db.Boolean) #optional, as a checkbox - then you don't have to set the time (like "all-day")
   #it could appear at the top 
 
-  task_scheduled_day = db.Column(db.Enum) #restrict on the frontend Monday, Tuesday, etc + everyday
-  #if daily, it should already be everyday
+  task_scheduled_day = db.Column(db.String) #restrict on the frontend Monday, Tuesday, etc + everyday
+  #if daily, it should already be everyday #Could be Enum
 
   task_scheduled_hour_start = db.Column(db.DateTime)
   task_scheduled_hour_end = db.Column(db.DateTime) #not required for all tasks
-
-  #simplified version --
-  instructions = db.Column(db.String)
 
 
   def __repr__(self):
@@ -149,13 +167,20 @@ class TaskHistory(db.Model):
             db.ForeignKey('users.user_id'),
             nullable=False) 
 
-  date = db.Column(db.DateTime)
+  date_scheduled = db.Column(db.DateTime)
+  date_happened = db.Column(db.DateTime)
+
   #option: restricting time frame when you can complete task, like morning walk only in morning
   #can log in whenever you want
   #You'll get the information from the task table
 
   task_comment = db.Column(db.String)
   task_completed = db.Column(db.Boolean, nullable=True) #check that it defaults to False as start
+  #Add: create the next occurence for the task after the current one has been completed
+  # Example - after Evening walk has occurred, create the next time it needs to happen
+  #front end would check it off, Run a function in crud after a result of task_completed, then that would also call 
+  #crud function to create a new task. 
+
 
   #Frontend - unscheduled task, task_id nullable=True
   #A task that doesn't need to be set, dropdown has (Unscheduled Event)
